@@ -1,4 +1,4 @@
-import { UserSelector } from "@/redux/userReducer";
+import { UserSelector } from "@/redux/reducers/userReducer";
 import { Navigate } from "react-router-dom";
 import { useAppSelector } from "../hookStore.utilities";
 
