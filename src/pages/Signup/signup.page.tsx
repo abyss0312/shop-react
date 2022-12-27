@@ -2,8 +2,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -11,10 +9,12 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { SignupForm, SignupFormEmpty } from '@/models/signup.interface';
+import { SignupForm, SignupFormEmpty, SignupModel } from '@/models/signup.interface';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Alert } from '@mui/material';
 import { Spacer} from '@nextui-org/react';
+import { AuthService } from '@/services';
+import { SnackbarUtilities } from '@/utilities';
 
 const theme = createTheme();
 
@@ -24,7 +24,25 @@ export const SignupPage = () => {
         defaultValues: SignupFormEmpty
     });
 
-    const handleForm:SubmitHandler<SignupForm>  = data => console.log(data);
+    const handleForm:SubmitHandler<SignupForm>  = async data => {
+      
+      const user:SignupModel = {
+        firstname:data.firstname,
+        lastname: data.lastname,
+        birthdate: data.birthdate,
+        username: data.username,
+        password: data.password
+      }
+
+      try{
+        await AuthService.signup(user);
+        SnackbarUtilities.success('Registrado Correctamente');
+      }
+      catch(error){
+        console.log(error);
+      }
+    
+    };
  
 
     return(
@@ -67,6 +85,20 @@ export const SignupPage = () => {
                   autoComplete="family-name"
                   {...register("lastname", {required:'el  apellido es requerido'})}
                 />
+              </Grid>
+              <Spacer y={0.5} />
+                {errors.lastname && <Alert severity="error">{errors.lastname?.message}</Alert>}
+                <Grid item xs={12} >
+                     <TextField
+                        fullWidth
+                        id="date"
+                        label="Fecha de nacimiento"
+                        type="date"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        {...register("birthdate", {required:'la fecha es requerido'})}
+                      />
               </Grid>
               <Spacer y={0.5} />
                 {errors.lastname && <Alert severity="error">{errors.lastname?.message}</Alert>}

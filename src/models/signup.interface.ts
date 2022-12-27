@@ -30,7 +30,7 @@ export const SignupModelEmpty:SignupModel = {
 export const SignupFormEmpty:SignupForm = {
     firstname: "",
     lastname: "",
-    birthdate: "",
+    birthdate: "2017-05-24",
     username: "",
     password: "",
     confPass: ""

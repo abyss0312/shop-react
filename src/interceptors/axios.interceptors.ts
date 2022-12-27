@@ -1,34 +1,20 @@
 
-import axios, { AxiosRequestConfig } from 'axios';
-import { SnackbarUtilities } from '@/utilities';
+
+import { instance, SnackbarUtilities } from '@/utilities';
+
 
 export const AxiosInterceptor = () => {
 
-  //saveInLocalStorage(LocalStorageKeys.TOKEN, '123123123123');
 
-  const updateHeader = (request: AxiosRequestConfig) => {
-    const token = '';//getInLocalStorage(LocalStorageKeys.TOKEN);
-    const newHeaders = {
-      Authorization: token,
-      'Content-Type': 'application/json'
-    };
-    request.headers = newHeaders;
-    return request;
-  };
-
-  axios.interceptors.request.use((request) => {
-    if (request.url?.includes('assets')) return request;
-    return updateHeader(request);
-  });
-
-  axios.interceptors.response.use(
+  instance.interceptors.response.use(
     (response) => {
       console.log('response', response);
-      //SnackbarUtilities.success('Success');
+      SnackbarUtilities.success('Success');
       return response;
     },
     (error) => {
-      //SnackbarUtilities.error(getValidationError(error.code));
+      console.log('SS',error);
+      SnackbarUtilities.error(error.response.data.error);
       return Promise.reject(error);
     }
   );

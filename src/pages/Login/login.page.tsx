@@ -12,6 +12,8 @@ import {
 import { Login, LoginEmpty } from '@/models';
 import { useForm, SubmitHandler } from "react-hook-form";
 import Alert from '@mui/material/Alert';
+import { AuthService } from '@/services';
+import { SnackbarUtilities } from '@/utilities';
 
 
 export const  LoginPage = () => {
@@ -19,6 +21,22 @@ export const  LoginPage = () => {
   const { register, handleSubmit, formState:{errors} } = useForm<Login>({
     defaultValues:LoginEmpty
   });
+
+
+  const handleForm = async (user: Login) =>{
+
+  
+    try{
+      const result =  await AuthService.login(user);
+
+      console.log(result)
+    }
+    catch(err){
+      console.log(err);
+    }
+   
+
+  }
 
   return (
     <div>
@@ -28,10 +46,7 @@ export const  LoginPage = () => {
         justify="center"
         css={{ minHeight: '20px' }}
       >
-          <form onSubmit={handleSubmit((data) => {
-            console.log(data);
-            console.log('sss')
-          })}>
+          <form onSubmit={handleSubmit(handleForm)}>
         <Card css={{w:'80vh', p: '50px' }}>
           <Text
             size={24}
